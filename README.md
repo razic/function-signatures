@@ -69,42 +69,41 @@ var signatures = new functionSignatures({
   }
 });
 
-signatures.on('normalize', function(self, signature, args) {
-  self.points = { a: {}, b: {} };
+signatures.on("six numbers", function() {;
+  this.points.a.x = arguments[0];
+  this.points.a.y = arguments[1];
+  this.points.a.z = arguments[2];
+  this.points.b.x = arguments[3];
+  this.points.b.y = arguments[4];
+  this.points.b.z = arguments[5];
+});
 
-  switch (signature) {
-    case "six numbers":
-      self.points.a.x = args[0];
-      self.points.a.y = args[1];
-      self.points.a.z = args[2];
-      self.points.b.x = args[3];
-      self.points.b.y = args[4];
-      self.points.b.z = args[5];
-      break;
-    case "two objects, each with x, y and z properties":
-      self.points.a = args[0];
-      self.points.b = args[1];
-      break;
-    case "two arrays, each having three numbers":
-      self.points.a.x = args[0];
-      self.points.a.y = args[1];
-      self.points.a.z = args[2];
-      self.points.b.x = args[3];
-      self.points.b.y = args[4];
-      self.points.b.z = args[5];
-      break;
-    case "one array with six numbers":
-      self.points.a.x = args[0][0];
-      self.points.a.y = args[0][1];
-      self.points.a.z = args[0][2];
-      self.points.b.x = args[0][3];
-      self.points.b.y = args[0][4];
-      self.points.b.z = args[0][5];
-      break;
-  }
+signatures.on("two objects, each with x, y and z properties", function() {
+  this.points.a = args[0];
+  this.points.b = args[1];
+});
+
+signatures.on("two arrays, each having three numbers", function() {
+  this.points.a.x = args[0][0];
+  this.points.a.y = args[0][1];
+  this.points.a.z = args[0][2];
+  this.points.b.x = args[1][0];
+  this.points.b.y = args[1][1];
+  this.points.b.z = args[1][2];
+});
+
+signatures.on("one array with six numbers", function() {
+  this.points.a.x = args[0][0];
+  this.points.a.y = args[0][1];
+  this.points.a.z = args[0][2];
+  this.points.b.x = args[0][3];
+  this.points.b.y = args[0][4];
+  this.points.b.z = args[0][5];
 });
 
 function euclideanDistance() {
+  this.points = { a: {}, b:{} };
+
   signatures.normalize(arguments);
 
   var x1 = this.points.a.x;
