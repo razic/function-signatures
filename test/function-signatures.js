@@ -19,6 +19,21 @@ describe('functionSignatures', function() {
     });
 
     describe('.normalize(arguments)', function() {
+      it('should throw an error if passed an invalid signature', function() {
+        var errorMessage;
+
+        try {
+          function someFunc() { signatures.normalize({}, {}, {}); };
+          someFunc();
+        } catch (error) {
+          errorMessage = error.message;
+        }
+
+        var expected = 'Invalid function signature for: ' + someFunc.toString();
+
+        assert(errorMessage === expected);
+      });
+
       it('should only emit the first signature that returns true', function() {
         var emits = [];
 
