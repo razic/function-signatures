@@ -35,4 +35,3 @@ functionSignatures.prototype.normalize = function normalize() {
  * Mixin
  */
 Emitter(functionSignatures.prototype);
-
