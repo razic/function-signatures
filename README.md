@@ -24,41 +24,41 @@ call your function with an incorrect function signature.
 
 ```javascript
 var signatures = new functionSignatures({
-  "six numbers": function() {
+  "six numbers": function(x1, y1, z1, x2, y2, z2) {
     return arguments.length === 6 &&
-    typeof arguments[0] === 'number' &&
-    typeof arguments[1] === 'number' &&
-    typeof arguments[2] === 'number' &&
-    typeof arguments[3] === 'number' &&
-    typeof arguments[4] === 'number' &&
-    typeof arguments[5] === 'number';
+    typeof x1 === 'number' &&
+    typeof y1 === 'number' &&
+    typeof z1 === 'number' &&
+    typeof x2 === 'number' &&
+    typeof y2 === 'number' &&
+    typeof z2 === 'number';
   },
-  "two objects, each with x, y and z properties": function() {
+  "two objects, each with x, y and z properties": function(a, b) {
     return arguments.length === 2 &&
-    typeof arguments[0].x === 'number' &&
-    typeof arguments[0].y === 'number' &&
-    typeof arguments[0].z === 'number' &&
-    typeof arguments[1].x === 'number' &&
-    typeof arguments[1].y === 'number' &&
-    typeof arguments[1].z === 'number';
+    typeof a.x === 'number' &&
+    typeof a.y === 'number' &&
+    typeof a.z === 'number' &&
+    typeof b.x === 'number' &&
+    typeof b.y === 'number' &&
+    typeof b.z === 'number';
   },
-  "two arrays, each having three numbers": function() {
+  "two arrays, each having three numbers": function(a, b) {
     return arguments.length === 2 &&
-    arguments[0] instanceof Array &&
-    arguments[1] instanceof Array &&
-    arguments[0].length === 3 &&
-    arguments[1].length === 3 &&
-    typeof arguments[0][0] === 'number' &&
-    typeof arguments[0][1] === 'number' &&
-    typeof arguments[0][2] === 'number' &&
-    typeof arguments[1][0] === 'number' &&
-    typeof arguments[1][1] === 'number' &&
-    typeof arguments[1][2] === 'number';
+    a instanceof Array &&
+    b instanceof Array &&
+    a.length === 3 &&
+    b.length === 3 &&
+    typeof a[0] === 'number' &&
+    typeof a[1] === 'number' &&
+    typeof a[2] === 'number' &&
+    typeof b[0] === 'number' &&
+    typeof b[1] === 'number' &&
+    typeof b[2] === 'number';
     
   },
-  "one array with six numbers": function() {
+  "one array with six numbers": function(ab) {
     return arguments.length === 1 &&
-    arguments[0] instanceof Array &&
+    ab[0] instanceof Array &&
     arguments[0].length === 6 &&
     typeof arguments[0][0] === 'number' &&
     typeof arguments[0][1] === 'number' &&
@@ -69,52 +69,48 @@ var signatures = new functionSignatures({
   }
 });
 
-signatures.on("six numbers", function() {;
-  this.points.a.x = arguments[0];
-  this.points.a.y = arguments[1];
-  this.points.a.z = arguments[2];
-  this.points.b.x = arguments[3];
-  this.points.b.y = arguments[4];
-  this.points.b.z = arguments[5];
+signatures.on("six numbers", function(x1, y1, z1, x2, y2, z2) {
+  this.x1 = x1;
+  this.y1 = y1;
+  this.z1 = z1;
+  this.x2 = x2;
+  this.y2 = y2;
+  this.z2 = z2;
 });
 
-signatures.on("two objects, each with x, y and z properties", function() {
-  this.points.a = arguments[0];
-  this.points.b = arguments[1];
+signatures.on("two objects, each with x, y and z properties", function(a, b) {
+  this.x1 = a.x;
+  this.y1 = a.y;
+  this.z1 = a.z;
+  this.x2 = b.x;
+  this.y2 = b.y;
+  this.z2 = b.z;
 });
 
-signatures.on("two arrays, each having three numbers", function() {
-  this.points.a.x = arguments[0][0];
-  this.points.a.y = arguments[0][1];
-  this.points.a.z = arguments[0][2];
-  this.points.b.x = arguments[1][0];
-  this.points.b.y = arguments[1][1];
-  this.points.b.z = arguments[1][2];
+signatures.on("two arrays, each having three numbers", function(a, b) {
+  this.x1 = a[0];
+  this.y1 = a[1];
+  this.z1 = a[2];
+  this.x2 = b[0];
+  this.y2 = b[1];
+  this.z2 = b[2];
 });
 
-signatures.on("one array with six numbers", function() {
-  this.points.a.x = arguments[0][0];
-  this.points.a.y = arguments[0][1];
-  this.points.a.z = arguments[0][2];
-  this.points.b.x = arguments[0][3];
-  this.points.b.y = arguments[0][4];
-  this.points.b.z = arguments[0][5];
+signatures.on("one array with six numbers", function(ab) {
+  this.x1 = ab[0];
+  this.y1 = ab[1];
+  this.z1 = ab[2];
+  this.x2 = ab[3];
+  this.y2 = ab[4];
+  this.z2 = ab[5];
 });
 
 function euclideanDistance() {
-  signatures.points = { a: {}, b:{} };
-
   signatures.normalize(arguments);
 
-  var x1 = signatures.points.a.x;
-  var y1 = signatures.points.a.y;
-  var z1 = signatures.points.a.z;
-  var x2 = signatures.points.b.x;
-  var y2 = signatures.points.b.y;
-  var z2 = signatures.points.b.z;
-  var dx = x2 - x1;
-  var dy = y2 - y1;
-  var dz = z2 - z1;
+  var dx = signatures.x2 - signatures.x1;
+  var dy = signatures.y2 - signatures.y1;
+  var dz = signatures.z2 - signatures.z1;
 
   return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy ,2) + Math.pow(dz, 2));
 }
