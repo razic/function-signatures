@@ -8,11 +8,21 @@ var Emitter = require('emitter');
  */
 module.exports = functionSignatures;
 
+
 /**
  * Constructor
  */
-function functionSignatures(signatures) {
-  this._signatures = signatures;
+function functionSignatures(_signatures) {
+  if (arguments.length !== 1)
+    throw new Error('You must pass exactly one object');
+
+  if (arguments.length === 1)
+    for (var signature in _signatures)
+      if (_signatures.hasOwnProperty(signature))
+        if (typeof _signatures[signature] !== 'function')
+          throw new Error("Property `" + signature + "` is not a function");
+
+  this._signatures = _signatures;
 };
 
 /**

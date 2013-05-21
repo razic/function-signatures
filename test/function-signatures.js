@@ -14,6 +14,30 @@ describe('functionSignatures', function() {
   });
 
   describe('new functionSignatures(object)', function() {
+    it("should throw an error if you didn't pass any arguments", function() {
+      var errorMessage;
+
+      try {
+        new functionSignatures();
+      } catch (error) {
+        errorMessage = error.message;
+      }
+
+      assert(errorMessage === "You must pass exactly one object");
+    });
+
+    it("should throw an error if you didn't pass arguments proper", function() {
+      var errorMessage;
+
+      try {
+        new functionSignatures({ 'foo': 'bar' });
+      } catch (error) {
+        errorMessage = error.message;
+      }
+
+      assert(errorMessage === "Property `foo` is not a function");
+    });
+
     it('should set `_signatures` property to be the object passed', function() {
       assert(signatures._signatures === object);
     });
