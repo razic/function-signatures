@@ -2,7 +2,7 @@
   "name": "function-signatures",
   "repo": "razic/function-signatures",
   "description": "Flexible argument passing for functions.",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "keywords": [],
   "dependencies": {
     "component/emitter": "1.0.0"
