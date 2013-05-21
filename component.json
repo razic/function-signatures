@@ -2,9 +2,11 @@
   "name": "function-signatures",
   "repo": "razic/function-signatures",
   "description": "Flexible argument passing for functions.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "keywords": [],
-  "dependencies": {},
+  "dependencies": {
+    "component/emitter": "1.0.0"
+  },
   "development": {},
   "license": "MIT",
   "main": "index.js",
