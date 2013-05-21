@@ -23,6 +23,10 @@ call your function with an incorrect function signature.
 ## API
 
 ```javascript
+// Require the function
+var functionSignatures = require('function-signatures');
+
+// Initialize a `functionSignatures` object
 var signatures = new functionSignatures({
   "six numbers": function(x1, y1, z1, x2, y2, z2) {
     return arguments.length === 6 &&
@@ -58,17 +62,18 @@ var signatures = new functionSignatures({
   },
   "one array with six numbers": function(ab) {
     return arguments.length === 1 &&
-    ab[0] instanceof Array &&
-    arguments[0].length === 6 &&
-    typeof arguments[0][0] === 'number' &&
-    typeof arguments[0][1] === 'number' &&
-    typeof arguments[0][2] === 'number' &&
-    typeof arguments[0][3] === 'number' &&
-    typeof arguments[0][4] === 'number' &&
-    typeof arguments[0][5] === 'number';
+    ab instanceof Array &&
+    ab.length === 6 &&
+    typeof ab[0] === 'number' &&
+    typeof ab[1] === 'number' &&
+    typeof ab[2] === 'number' &&
+    typeof ab[3] === 'number' &&
+    typeof ab[4] === 'number' &&
+    typeof ab[5] === 'number';
   }
 });
 
+// Add event handlers to normalize the arguments
 signatures.on("six numbers", function(x1, y1, z1, x2, y2, z2) {
   this.x1 = x1;
   this.y1 = y1;
@@ -105,13 +110,17 @@ signatures.on("one array with six numbers", function(ab) {
   this.z2 = ab[5];
 });
 
+// Write your method
 function euclideanDistance() {
+  // Normalize the arguments
   signatures.normalize(arguments);
 
+  // Use the normalized arguments
   var dx = signatures.x2 - signatures.x1;
   var dy = signatures.y2 - signatures.y1;
   var dz = signatures.z2 - signatures.z1;
 
+  // Profit
   return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy ,2) + Math.pow(dz, 2));
 }
 ```
