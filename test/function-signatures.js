@@ -41,17 +41,17 @@ describe('new functionSignatures(object)', function() {
       eventHandlerArguments = null;
 
       signatures = new functionSignatures({
-        "one object": function() {
+        "one object": function(a) {
           signatureArguments = arguments;
-          return arguments.length === 1;
+          return a;
         },
-        "duplicate of the above": function() {
+        "duplicate of the above": function(a) {
           signatureArguments = arguments;
-          return arguments.length === 1;
+          return a;
         },
-        "two objects": function() {
+        "two objects": function(a, b) {
           signatureArguments = arguments;
-          return arguments.length === 2;
+          return a && b;
         }
       });
 
@@ -116,7 +116,6 @@ describe('new functionSignatures(object)', function() {
     it('should change the context of the event handler', function() {
       implementer('foo', 'bar');
 
-      console.log(eventHandlerContext);
       assert(eventHandlerContext === signatures);
     });
   });
