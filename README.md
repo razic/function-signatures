@@ -79,39 +79,39 @@ signatures.on("six numbers", function() {;
 });
 
 signatures.on("two objects, each with x, y and z properties", function() {
-  this.points.a = args[0];
-  this.points.b = args[1];
+  this.points.a = arguments[0];
+  this.points.b = arguments[1];
 });
 
 signatures.on("two arrays, each having three numbers", function() {
-  this.points.a.x = args[0][0];
-  this.points.a.y = args[0][1];
-  this.points.a.z = args[0][2];
-  this.points.b.x = args[1][0];
-  this.points.b.y = args[1][1];
-  this.points.b.z = args[1][2];
+  this.points.a.x = arguments[0][0];
+  this.points.a.y = arguments[0][1];
+  this.points.a.z = arguments[0][2];
+  this.points.b.x = arguments[1][0];
+  this.points.b.y = arguments[1][1];
+  this.points.b.z = arguments[1][2];
 });
 
 signatures.on("one array with six numbers", function() {
-  this.points.a.x = args[0][0];
-  this.points.a.y = args[0][1];
-  this.points.a.z = args[0][2];
-  this.points.b.x = args[0][3];
-  this.points.b.y = args[0][4];
-  this.points.b.z = args[0][5];
+  this.points.a.x = arguments[0][0];
+  this.points.a.y = arguments[0][1];
+  this.points.a.z = arguments[0][2];
+  this.points.b.x = arguments[0][3];
+  this.points.b.y = arguments[0][4];
+  this.points.b.z = arguments[0][5];
 });
 
 function euclideanDistance() {
-  this.points = { a: {}, b:{} };
+  signatures.points = { a: {}, b:{} };
 
   signatures.normalize(arguments);
 
-  var x1 = this.points.a.x;
-  var y1 = this.points.a.y;
-  var z1 = this.points.a.z;
-  var x2 = this.points.b.x;
-  var y2 = this.points.b.y;
-  var z2 = this.points.b.z;
+  var x1 = signatures.points.a.x;
+  var y1 = signatures.points.a.y;
+  var z1 = signatures.points.a.z;
+  var x2 = signatures.points.b.x;
+  var y2 = signatures.points.b.y;
+  var z2 = signatures.points.b.z;
   var dx = x2 - x1;
   var dy = y2 - y1;
   var dz = z2 - z1;
