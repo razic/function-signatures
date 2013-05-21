@@ -23,22 +23,20 @@ function functionSignatures(_signatures) {
           throw new Error("Property `" + signature + "` is not a function");
 
   this._signatures = _signatures;
-};
+}
 
 /**
  * Prototype
  */
-functionSignatures.prototype.normalize = function normalize() {
-  arguments = Array.prototype.slice.call(arguments, 0);
+functionSignatures.prototype.normalize = function normalize(args) {
+  args = Array.prototype.slice.call(args, 0);
 
   for (var signature in this._signatures)
     if (this._signatures.hasOwnProperty(signature))
-      if (this._signatures[signature].apply(this, arguments))
-        return this.emit.apply(this, [signature].concat(arguments));
+      if (this._signatures[signature].apply(this, args))
+        return this.emit.apply(this, [signature].concat(args));
 
-  var caller = normalize.caller;
-
-  throw new Error("Invalid function signature for: " + caller.toString());
+  throw new Error("Invalid signature for: " + normalize.caller.toString());
 };
 
 /**

@@ -1,101 +1,123 @@
 var assert = require('assert'),
-    functionSignatures = require('function-signatures'),
-    prototype = functionSignatures.prototype,
-    object = {
-      "one object": function() { return arguments.length === 1; },
-      "duplicate of above": function() { return arguments.length === 1; },
-      "two objects": function() { return arguments.length === 2; }
-    },
-    signatures = new functionSignatures(object);
+    functionSignatures = require('function-signatures');
 
-describe('functionSignatures', function() {
-  it('should be a function', function() {
-    assert(typeof functionSignatures === 'function');
+describe('new functionSignatures(object)', function() {
+  it("should throw an error if you didn't pass any arguments", function() {
+    var errorMessage;
+
+    try {
+      new functionSignatures();
+    } catch (error) {
+      errorMessage = error.message;
+    }
+
+    assert(errorMessage === "You must pass exactly one object");
   });
 
-  describe('new functionSignatures(object)', function() {
-    it("should throw an error if you didn't pass any arguments", function() {
-      var errorMessage;
+  it("should throw an error if you didn't pass arguments properly", function() {
+    var errorMessage;
 
-      try {
-        new functionSignatures();
-      } catch (error) {
-        errorMessage = error.message;
-      }
+    try {
+      new functionSignatures({ 'foo': 'bar' });
+    } catch (error) {
+      errorMessage = error.message;
+    }
 
-      assert(errorMessage === "You must pass exactly one object");
-    });
+    assert(errorMessage === "Property `foo` is not a function");
+  });
 
-    it("should throw an error if you didn't pass arguments proper", function() {
-      var errorMessage;
+  describe('.normalize(arguments)', function() {
+    var emits,
+        signatures,
+        implementer,
+        signatureArguments,
+        eventHandlerContext,
+        eventHandlerArguments;
 
-      try {
-        new functionSignatures({ 'foo': 'bar' });
-      } catch (error) {
-        errorMessage = error.message;
-      }
+    beforeEach(function() {
+      emits = [];
+      signatureArguments = null;
+      eventHandlerContext = null;
+      eventHandlerArguments = null;
 
-      assert(errorMessage === "Property `foo` is not a function");
-    });
-
-    it('should set `_signatures` property to be the object passed', function() {
-      assert(signatures._signatures === object);
-    });
-
-    describe('.normalize(arguments)', function() {
-      it('should throw an error if passed an invalid signature', function() {
-        var errorMessage;
-
-        try {
-          function someFunc() { signatures.normalize({}, {}, {}); };
-          someFunc();
-        } catch (error) {
-          errorMessage = error.message;
+      signatures = new functionSignatures({
+        "one object": function() {
+          signatureArguments = arguments;
+          return arguments.length === 1;
+        },
+        "duplicate of the above": function() {
+          signatureArguments = arguments;
+          return arguments.length === 1;
+        },
+        "two objects": function() {
+          signatureArguments = arguments;
+          return arguments.length === 2;
         }
-
-        var expected = 'Invalid function signature for: ' + someFunc.toString();
-
-        assert(errorMessage === expected);
       });
 
-      it('should only emit the first signature that returns true', function() {
-        var emits = [];
-
-        signatures.on('one object', function() {
-          emits.unshift('one object');
-        });
-
-        signatures.on('duplicate of above', function() {
-          emits.unshift('duplicate of above');
-        });
-
-        signatures.normalize({});
-        signatures.off();
-
-        assert(emits.length === 1);
-        assert(emits[0] === "one object");
+      signatures.on("one object", function() {
+        eventHandlerContext = this;
+        eventHandlerArguments = arguments;
+        emits.unshift('one object');
       });
 
-      it('should pass arguments to the event handler properly', function() {
-        var args;
-
-        signatures.on('two objects', function() { args = arguments; });
-        signatures.normalize('foo', 'bar');
-        signatures.off();
-
-        assert(args[0] === 'foo');
-        assert(args[1] === 'bar');
+      signatures.on("duplicate of the above", function() {
+        eventHandlerContext = this;
+        eventHandlerArguments = arguments;
+        emits.unshift('duplicate of the above');
       });
 
-      it('should change the context of the event handler', function() {
-        var context;
-
-        signatures.on('two objects', function() { context = this; });
-        signatures.normalize('foo', 'bar');
-        signatures.off();
-
-        assert(context === signatures);
+      signatures.on("two objects", function() {
+        eventHandlerContext = this;
+        eventHandlerArguments = arguments;
+        emits.unshift('two objects');
       });
+
+      implementer = function implementer() {
+        signatures.normalize(arguments);
+      };
+    });
+
+    it('should throw an error if passed an invalid signature', function() {
+      var errorMessage;
+
+      try {
+        implementer({}, {}, {});
+      } catch (error) {
+        errorMessage = error.message;
+      }
+
+      var msg = 'Invalid signature for: ' + implementer.toString();
+
+      assert(errorMessage === msg);
+    });
+
+    it('should only emit the first signature that returns true', function() {
+      implementer({});
+
+      assert(emits.length === 1);
+      assert(emits[0] === "one object");
+    });
+
+    it('should pass arguments to the signature properly', function() {
+      implementer('foo', 'bar');
+
+      assert(signatureArguments[0] === 'foo');
+      assert(signatureArguments[1] === 'bar');
+    });
+
+    it('should pass arguments to the event handler properly', function() {
+      implementer('foo', 'bar');
+
+      assert(eventHandlerArguments[0] === 'foo');
+      assert(eventHandlerArguments[1] === 'bar');
+    });
+
+    it('should change the context of the event handler', function() {
+      implementer('foo', 'bar');
+
+      console.log(eventHandlerContext);
+      assert(eventHandlerContext === signatures);
     });
   });
 });
