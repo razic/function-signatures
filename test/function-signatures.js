@@ -1,5 +1,6 @@
 var assert = require('assert'),
-    functionSignatures = require('function-signatures');
+    functionSignatures = require('function-signatures'),
+    prototype = functionSignatures.prototype;
 
 describe('functionSignatures', function() {
   it('should be a function', function() {
@@ -7,7 +8,6 @@ describe('functionSignatures', function() {
   });
 
   describe('the prototype', function() {
-    var prototype = functionSignatures.prototype;
     it('should have a `normalize` function', function() {
       assert(typeof prototype.normalize === 'function');
     });
