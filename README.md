@@ -29,8 +29,7 @@ var functionSignatures = require('function-signatures');
 // Initialize a `functionSignatures` object
 var signatures = new functionSignatures({
   "six numbers": function(x1, y1, z1, x2, y2, z2) {
-    return
-    typeof x1 === 'number' &&
+    return typeof x1 === 'number' &&
     typeof y1 === 'number' &&
     typeof z1 === 'number' &&
     typeof x2 === 'number' &&
@@ -38,8 +37,7 @@ var signatures = new functionSignatures({
     typeof z2 === 'number';
   },
   "two objects, each with x, y and z properties": function(a, b) {
-    return
-    typeof a.x === 'number' &&
+    return typeof a.x === 'number' &&
     typeof a.y === 'number' &&
     typeof a.z === 'number' &&
     typeof b.x === 'number' &&
@@ -47,8 +45,7 @@ var signatures = new functionSignatures({
     typeof b.z === 'number';
   },
   "two arrays, each having three numbers": function(a, b) {
-    return
-    a instanceof Array &&
+    return a instanceof Array &&
     b instanceof Array &&
     a.length === 3 &&
     b.length === 3 &&
@@ -61,8 +58,7 @@ var signatures = new functionSignatures({
     
   },
   "one array with six numbers": function(ab) {
-    return
-    ab instanceof Array &&
+    return ab instanceof Array &&
     ab.length === 6 &&
     typeof ab[0] === 'number' &&
     typeof ab[1] === 'number' &&
