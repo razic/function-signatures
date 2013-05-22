@@ -41,13 +41,13 @@ describe('new functionSignatures(object)', function() {
       eventHandlerArguments = null;
 
       signatures = new functionSignatures({
-        "one object": function(a) {
+        "one object": function() {
           signatureArguments = arguments;
-          return a;
+          return arguments.length === 1;
         },
-        "duplicate of the above": function(a) {
+        "duplicate of the above": function() {
           signatureArguments = arguments;
-          return a;
+          return arguments.length === 1;
         },
         "two objects": function(a, b) {
           signatureArguments = arguments;

@@ -29,13 +29,21 @@ function functionSignatures(_signatures) {
  * Prototype
  */
 functionSignatures.prototype.normalize = function normalize(args) {
+  var signatures = this._signatures;
+
   args = Array.prototype.slice.call(args, 0);
 
-  for (var signature in this._signatures)
-    if (this._signatures.hasOwnProperty(signature))
-      if(this._signatures[signature].length === args.length)
-        if (this._signatures[signature].apply(this, args))
-          return this.emit.apply(this, [signature].concat(args));
+  for (var name in signatures) {
+    if (signatures.hasOwnProperty(name)) {
+      var signature = signatures[name];
+
+      if (signature.length === 0 || signature.length === args.length) {
+        if (signature.apply(this, args)) {
+          return this.emit.apply(this, [name].concat(args));
+        }
+      }
+    }
+  }
 
   throw new Error("Invalid signature for: " + normalize.caller.toString());
 };
