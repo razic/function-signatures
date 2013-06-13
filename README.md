@@ -1,4 +1,4 @@
-# function-signatures
+# Function Signatures
 
 > Flexible argument passing for functions.
 
